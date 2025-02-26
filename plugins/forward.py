@@ -7,7 +7,7 @@ from config import CAPTION
 from pyrogram.errors import FloodWait
 
 # Define Source and Destination Channel IDs
-SOURCE_CHANNEL_ID = -1002325349128  # Replace with your source channel ID
+SOURCE_CHANNEL_ID = -1002492867485  # Replace with your source channel ID
 DEST_CHANNEL_ID = -1001855298932  # Replace with your destination channel ID
 
 # Reversed Regex: Matches files that DO NOT contain episode-related patterns

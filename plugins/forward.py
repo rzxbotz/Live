@@ -44,7 +44,7 @@ async def auto_forward(client, message):
         await client.copy_message(
             chat_id=DEST_CHANNEL_ID,
             from_chat_id=SOURCE_CHANNEL_ID,
-            message_id=message.message_id,
+            message_id=message.id,
             caption=CAPTION.format(file_name=file_name, file_size=file_size, file_caption=file_caption)
         )
         

@@ -11,7 +11,7 @@ SOURCE_CHANNEL_ID = -1002492867485  # Replace with your source channel ID
 DEST_CHANNEL_ID = -1001855298932  # Replace with your destination channel ID
 
 # Reversed Regex: Matches files that DO NOT contain episode-related patterns
-NON_EPISODE_REGEX = re.compile(r"^(?!.*(s\d{1,2}[\.\s]?e[p]?\d{1,2}|season|\bepisode\b)).*$", re.IGNORECASE)
+NON_EPISODE_REGEX = re.compile(r"(?i)^(?!.*S\d{1,2}E\d{1,2})(.*?)[ ._](\d{3,4}p|HDRip|BluRay|BRRip|DVDRip|WEBRip|WEB-DL|HDTV)[ ._](x264|x265|HEVC|AAC|DDP|DTS|5\.1|7\.1)?[ ._-]?(Dual|Hindi|English|Tamil|Telugu|Malayalam|Bengali|Multi)?[ ._-]?(ESub|EngSub|HindiSub|Subbed)?(?:\.mkv|\.mp4|\.avi|\.mov|\.wmv)?$", re.IGNORECASE)
 
 @Client.on_message(filters.channel & filters.chat(SOURCE_CHANNEL_ID))
 async def auto_forward(client, message):

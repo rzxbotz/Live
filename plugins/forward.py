@@ -1,7 +1,7 @@
 import logging
 import re
 import asyncio
-from config import SOURCE_CHANNEL, DESTINATION_CHANNEL, REGEX_PATTERN, CAPTION_TEMPLATE
+from config import SOURCE_CHANNEL, DESTINATION_CHANNEL, MOVIE_REGEX, CAPTION_TEMPLATE
 
 async def forward_message(client, message, collection):
     try:
@@ -12,7 +12,7 @@ async def forward_message(client, message, collection):
         file_name = message.document.file_name if message.document else "Unknown File"
 
         # Check if message matches regex pattern
-        if REGEX_PATTERN and not re.search(REGEX_PATTERN, message.caption or ""):
+        if MOVIE_REGEX and not re.search(MOVIE_REGEX, message.caption or ""):
             logging.info(f"⚠️ Skipped: {file_name} (Does not match regex)")
             return  # Skip if it doesn't match
 

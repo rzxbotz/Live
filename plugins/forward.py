@@ -29,7 +29,8 @@ async def process_queue(client):
         while True:  # Retry loop for FloodWait handling
             try:
                 if not message.media:
-                    continue  # Skip if there's no media
+                    print(f"Skipping: Message {message.id} has no media.")
+                    break  # Exit retry loop
 
                 file_name = None
                 file_size = None
@@ -46,11 +47,14 @@ async def process_queue(client):
                     file_name = message.audio.file_name
                     file_size = get_size(message.audio.file_size)
 
+                # Log detected media
+                print(f"Processing: {file_name or 'No filename'} | Caption: {file_caption}")
+
                 # Skip if file is an episode
                 if (file_name and NON_EPISODE_REGEX.match(file_name)) or (
                     file_caption and NON_EPISODE_REGEX.match(file_caption)
                 ):
-                    print(f"Skipped: {file_name or 'No filename'} | Caption: {file_caption}")
+                    print(f"❌ Skipped: {file_name or 'No filename'} | Caption: {file_caption}")
                     break  # Exit retry loop, move to next message
 
                 # Forward the message with custom caption
@@ -61,7 +65,7 @@ async def process_queue(client):
                     caption=CAPTION.format(file_name=file_name, file_size=file_size, file_caption=file_caption),
                 )
 
-                print(f"Forwarded: {file_name}")
+                print(f"✅ Forwarded: {file_name}")
 
                 # Add random sleep time to avoid API bans
                 await asyncio.sleep(random.uniform(2, 5))
@@ -69,17 +73,36 @@ async def process_queue(client):
 
             except FloodWait as e:
                 wait_time = e.value + random.randint(1, 5)  # Random buffer to avoid bans
-                print(f"FloodWait triggered! Sleeping for {wait_time} seconds.")
+                print(f"🚨 FloodWait triggered! Sleeping for {wait_time} seconds.")
                 await asyncio.sleep(wait_time)
 
             except Exception as e:
-                print(f"Error processing message: {e}")
+                print(f"❗ Error processing message: {e}")
                 break  # Exit retry loop, move to next message
 
 
 @Client.on_message(filters.channel & filters.chat(SOURCE_CHANNEL_ID))
 async def auto_forward(client, message):
-    """Adds messages to the queue for processing."""
+    """Logs every message and adds it to the queue for processing."""
+    
+    # Debug: Log every message received
+    print(f"📩 Received message: {message.id} | Media: {bool(message.media)}")
+    
+    # If media exists, check details
+    if message.media:
+        file_name = None
+        file_caption = message.caption if message.caption else ""
+        
+        if message.document:
+            file_name = message.document.file_name
+        elif message.video:
+            file_name = message.video.file_name
+        elif message.audio:
+            file_name = message.audio.file_name
+
+        print(f"🎞️ Detected Media: {file_name or 'No filename'} | Caption: {file_caption}")
+
+    # Add the message to the queue for processing
     await message_queue.put(message)
 
 
@@ -88,9 +111,9 @@ async def fetch_unread_messages(client):
     try:
         async for message in client.get_chat_history(SOURCE_CHANNEL_ID, limit=50):
             await message_queue.put(message)
-        print("Fetched unread messages and added to queue.")
+        print("🔄 Fetched unread messages and added to queue.")
     except Exception as e:
-        print(f"Error fetching unread messages: {e}")
+        print(f"❗ Error fetching unread messages: {e}")
 
 
 async def main():
@@ -102,7 +125,7 @@ async def main():
         # Start processing queue
         asyncio.create_task(process_queue(client))
 
-        print("Bot is running...")
+        print("🚀 Bot is running...")
         await client.run()  # Keep bot running
 
 
@@ -119,3 +142,4 @@ def get_size(size):
 
 if __name__ == "__main__":
     asyncio.run(main())
+            

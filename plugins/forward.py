@@ -17,7 +17,7 @@ async def forward_message(client, message, collection):
             return  # Skip if it doesn't match
 
         # Check if message was already forwarded
-        exists = await collection.find_one({"message_id": message.message_id})
+        exists = await collection.find_one({"message_id": message.id})  # ✅ Fixed here
         if exists:
             logging.info(f"⚠️ Skipped: {file_name} (Already forwarded)")
             return
@@ -27,19 +27,22 @@ async def forward_message(client, message, collection):
         new_caption = CAPTION_TEMPLATE.format(original_caption=original_caption, file_name=file_name)
 
         # Forward with modified caption
-        await client.send_message(
-            chat_id=DESTINATION_CHANNEL,
-            text=new_caption,
-            reply_to_message_id=message.id if message.media else None
-        ) if message.text else await client.copy_message(
-            chat_id=DESTINATION_CHANNEL,
-            from_chat_id=SOURCE_CHANNEL,
-            message_id=message.message_id,
-            caption=new_caption
-        )
+        if message.text:
+            await client.send_message(
+                chat_id=DESTINATION_CHANNEL,
+                text=new_caption,
+                reply_to_message_id=message.id if message.media else None
+            )
+        else:
+            await client.copy_message(
+                chat_id=DESTINATION_CHANNEL,
+                from_chat_id=SOURCE_CHANNEL,
+                message_id=message.id,  # ✅ Fixed here
+                caption=new_caption
+            )
 
         # Save forwarded message ID in database
-        await collection.insert_one({"message_id": message.message_id})
+        await collection.insert_one({"message_id": message.id})  # ✅ Fixed here
 
         logging.info(f"✅ Forwarded: {file_name} to {DESTINATION_CHANNEL}")
 

@@ -40,9 +40,18 @@ async def handle_new_message(client, message):
 
 # Start bot and web server
 async def main():
+    """Start bot and web server asynchronously."""
     await start_web()
     await app.start()
-    await asyncio.get_event_loop().run_forever()
+    logger.info("Bot started successfully.")
+    await asyncio.Event().wait()  # Keeps the bot running without conflicts
 
+# Fix AsyncIO Event Loop Issue
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main())
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(main())

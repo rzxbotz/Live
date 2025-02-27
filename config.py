@@ -10,3 +10,5 @@ DESTINATION_CHANNEL = int(os.getenv("DESTINATION_CHANNEL", -1001855298932))  # D
 MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://dudemusic111:dudemusic111@cluster0.df3yis2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")  # MongoDB Connection URI
 
 CAPTION_TEMPLATE = os.getenv("CAPTION_TEMPLATE", "<b>{original_caption}</b>")  # Custom Caption Format
+
+MOVIE_REGEX = r"(?i)^(?!.*\b(?:S\d{2}E\d{2}|S\d{2}\s?EP\d{2}|S\d{2}\s?E\d{2}|Season\s?\d+\s?Episode\s?\d+|EP\d+|E\d{2}(-E\d{2,})?|combined|-\sS\d{2}E\d{2}\s-)\b).*(19\d{2}|20\d{2}).*"

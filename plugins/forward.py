@@ -11,7 +11,7 @@ SOURCE_CHANNEL_ID = -1002492867485  # Replace with your source channel ID
 DEST_CHANNEL_ID = -1001855298932  # Replace with your destination channel ID
 
 # Reversed Regex: Matches files that DO NOT contain episode-related patterns
-NON_EPISODE_REGEX = re.compile(r"(?i)^(?!.*S\d{1,2}E\d{1,2})(.*?)[ ._](\d{3,4}p|HDRip|BluRay|BRRip|DVDRip|WEBRip|WEB-DL|HDTV)[ ._](x264|x265|HEVC|AAC|DDP|DTS|5\.1|7\.1)?[ ._-]?(Dual|Hindi|English|Tamil|Telugu|Malayalam|Bengali|Multi)?[ ._-]?(ESub|EngSub|HindiSub|Subbed)?(?:\.mkv|\.mp4|\.avi|\.mov|\.wmv)?$", re.IGNORECASE)
+NON_EPISODE_REGEX = re.compile(r"(?i)^(?!.*\b(?:S\d{2}E\d{2}|S\d{2}\s?EP\d{2}|S\d{2}\s?E\d{2}|Season\s?\d+\s?Episode\s?\d+|EP\d+|E\d{2}(-E\d{2,})?|combined|-\sS\d{2}E\d{2}\s-)\b).*(19\d{2}|20\d{2}).*", re.IGNORECASE)
 
 @Client.on_message(filters.channel & filters.chat(SOURCE_CHANNEL_ID))
 async def auto_forward(client, message):
@@ -35,9 +35,9 @@ async def auto_forward(client, message):
             file_name = message.audio.file_name
             file_size = get_size(message.audio.file_size)
 
-        # Check if file name DOES NOT match episode format
-        if file_name and not NON_EPISODE_REGEX.match(file_name):
-            print(f"Skipped: {file_name}")  # Log skipped message
+        # Check if file name or caption DOES NOT match episode format
+        if (file_name and not NON_EPISODE_REGEX.match(file_name)) and (file_caption and not NON_EPISODE_REGEX.match(file_caption)):
+            print(f"Skipped: {file_name or 'No filename'} | Caption: {file_caption}")  # Log skipped message
             return
         
         # Forward the message with custom caption

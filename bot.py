@@ -3,7 +3,7 @@ import asyncio
 import aiohttp
 from pyrogram import Client, filters
 from motor.motor_asyncio import AsyncIOMotorClient
-from config import API_ID, API_HASH, BOT_TOKEN, MONGO_URI, SESSION_NAME, SOURCE_CHANNEL
+from config import API_ID, API_HASH, BOT_TOKEN, MONGO_URI, SOURCE_CHANNEL  # Fixed import
 from plugins.forward import forward_message
 
 # Configure logging
@@ -13,9 +13,9 @@ logger = logging.getLogger(__name__)
 # Initialize Pyrogram client
 app = Client(
     "my_bot",
-    api_id=config.API_ID,
-    api_hash=config.API_HASH,
-    bot_token=config.BOT_TOKEN,
+    api_id=API_ID,  # Fixed usage
+    api_hash=API_HASH,
+    bot_token=BOT_TOKEN,
     plugins=dict(root="plugins")  # Ensure plugins are loaded
 )
 

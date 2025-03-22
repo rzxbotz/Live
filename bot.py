@@ -11,7 +11,13 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # Initialize Pyrogram client
-app = Client(SESSION_NAME, api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
+app = Client(
+    "my_bot",
+    api_id=config.API_ID,
+    api_hash=config.API_HASH,
+    bot_token=config.BOT_TOKEN,
+    plugins=dict(root="plugins")  # Ensure plugins are loaded
+)
 
 # Initialize MongoDB
 mongo_client = AsyncIOMotorClient(MONGO_URI)

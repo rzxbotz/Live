@@ -6,7 +6,7 @@ BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 SESSION_NAME = "movie_forward_bot"
 
 SOURCE_CHANNEL = int(os.getenv("SOURCE_CHANNEL", ""))
-DESTINATION_CHANNEL = list(map(int, os.getenv("DESTINATION_CHANNELS", "").split(',')))
+DESTINATION_CHANNEL = list(map(int, os.getenv("DESTINATION_CHANNEL", "").split(',')))
 
 MONGO_URI = os.getenv("MONGO_URI", "")
 CAPTION_TEMPLATE = os.getenv("CAPTION_TEMPLATE", "<b>{original_caption}</b>")

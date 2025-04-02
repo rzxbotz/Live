@@ -1,14 +1,14 @@
 import os
 
-API_ID = int(os.getenv("API_ID", 17427408))  # Telegram API ID
-API_HASH = os.getenv("API_HASH", "9699e632de895e7d566c241615a0e637")  # Telegram API Hash
-BOT_TOKEN = os.getenv("BOT_TOKEN", "7391030602:AAHOt_evgGTPyN3W2qW5P8fSiOQ_9IHBOVs")  # Telegram Bot Token
-SESSION_NAME = "movie_forward_bot"  # Pyrogram Session Name
+API_ID = int(os.getenv("API_ID", ""))
+API_HASH = os.getenv("API_HASH", "")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "")
+SESSION_NAME = "movie_forward_bot"
 
-SOURCE_CHANNEL = int(os.getenv("SOURCE_CHANNEL", -1002492867485))  # Source Channel ID
-DESTINATION_CHANNEL = int(os.getenv("DESTINATION_CHANNEL", -1001855298932))  # Destination Channel ID
-MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://dudemusic111:dudemusic111@cluster0.df3yis2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")  # MongoDB Connection URI
+SOURCE_CHANNEL = int(os.getenv("SOURCE_CHANNEL", ""))
+DESTINATION_CHANNEL = list(map(int, os.getenv("DESTINATION_CHANNELS", "").split(',')))
 
-CAPTION_TEMPLATE = os.getenv("CAPTION_TEMPLATE", "<b>{original_caption}</b>")  # Custom Caption Format
+MONGO_URI = os.getenv("MONGO_URI", "")
+CAPTION_TEMPLATE = os.getenv("CAPTION_TEMPLATE", "<b>{original_caption}</b>")
 
 MOVIE_REGEX = r"(?i)^(?!.*\b(?:S\d{2}E\d{2}|S\d{2}\s?EP\d{2}|S\d{2}\s?E\d{2}|Season\s?\d+\s?Episode\s?\d+|EP\d+|E\d{2}(-E\d{2,})?|combined|-\sS\d{2}E\d{2}\s-)\b).*(19\d{2}|20\d{2}).*"
